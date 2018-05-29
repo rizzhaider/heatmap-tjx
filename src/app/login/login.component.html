@@ -1,0 +1,24 @@
+
+<div class="login-page">
+  <div class="row justify-content-md-center">
+      <div class="col-md-4">
+          <img src="../../assets/img/hsc analytics.png" alt="Generic placeholder image" width="150px" class="user-avatar" />
+          <h1>Wifi Analytics</h1>
+          <form (ngSubmit)="login(f)" #f="ngForm">
+              <div class="form-content">
+                  <div class="form-group">
+                      <input type="text" class="form-control input-underline input-lg" placeholder="Username" name="username" ngModel #username="ngModel" required autocomplete="off" />
+                      <span class="help-block"  *ngIf="!username.valid && username.touched">Please enter a username</span>
+                    </div>
+
+                  <div class="form-group">
+                      <input type="password" class="form-control input-underline input-lg" name="password" placeholder="Password" ngModel  #password="ngModel" required  />
+                      <span class="help-block"  *ngIf="!password.valid && password.touched">Please enter a password</span>
+                    </div>
+              </div>
+              <button type="submit" class="btn rounded-btn" [disabled]="!f.valid" >Login</button>
+
+          </form>
+      </div>
+  </div>
+</div>

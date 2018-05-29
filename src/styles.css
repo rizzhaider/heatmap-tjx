@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+#spinner {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+     right:0;
+    position: fixed;
+    display: block;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 99;
+    text-align: center;
+ }
+ 
+ #img-spinner {
+   position: absolute;
+   top: 40%;
+   left: 40%;
+  
+   z-index: 100;
+   text-align: center;
+ }
+ .bs-datepicker{    
+    z-index: 99999999999!important;
+  }
+  .theme-green .bs-datepicker-head {
+      background-color:rgb(117,117,117) ;
+  }
+
+  .theme-green .bs-datepicker-body table td span.selected {
+    background-color:rgb(117,117,117) ;
+  }
+ 
+    /* end preloader */

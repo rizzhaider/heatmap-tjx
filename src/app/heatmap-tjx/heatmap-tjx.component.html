@@ -1,0 +1,118 @@
+<div id="spinner" *ngIf="loading">
+    <img id="img-spinner" src="../../assets/img/spinner.gif" alt="Loading" />
+</div>
+
+<div class="container"  >
+  <div class="row">
+      <div class="col-sm-6   col-md-3">
+              <div class="form-group ">
+                 <div class="input-group">
+                      
+                      <select [(ngModel)] = "selectedStore" name="selectedStore" (change) = "onStoreChange(selectedStore)" class="custom-select" id="inputGroupSelect01">
+                              <option *ngFor="let gStoreDropdownMap of gStoreDropdownMaps"  [ngValue]="gStoreDropdownMap.storeId"> {{gStoreDropdownMap.name}} </option>
+                      </select>
+                    </div>
+              </div> 
+      </div>
+     
+      <div class="col-sm-6 col-md-3">
+          <div class="form-group ">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1" (click)="dpStart.toggle()"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input  type="text"
+                  class="form-control"
+                  [minDate]="minDateStart"
+                  [maxDate]="maxDateStart"                
+                  [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD', showWeekNumbers: false }"             
+                  #dpStart="bsDatepicker"                
+                  value = "{{bsDateAPIStrStart}}" 
+                  bsDatepicker [(bsValue)]="bsValueStart" (bsValueChange) = "onChangeStartdate()" aria-describedby="basic-addon1" readonly>                
+                </div>
+            </div>
+      </div>
+      
+      <div class="col-sm-6 col-md-3">
+          <div class="form-group ">               
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="input-group-text" (click)="dpEnd.toggle()"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input   type="text"
+                  class="form-control"
+                  [minDate]="minDateEnd"
+                  [maxDate]="maxDateEnd"  
+                  [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD', showWeekNumbers: false }"             
+                  #dpEnd="bsDatepicker"                
+                  value = "{{bsDateAPIStrEnd}}" 
+                  bsDatepicker [(bsValue)]="bsValueEnd" (bsValueChange) = "onChangeEnddate()" readonly>                
+                </div>            
+            </div>
+      </div>
+      <div class="col-sm-6 col-md-1">
+            <button  data-toggle="modal" (click) = "onAddCategory()"  class="btn btn-outline-secondary" type="button">
+                    <span ><i class="fa fa-filter" aria-hidden="true"></i> Filter</span>                   
+                  </button>
+            
+      </div>
+      <div class="col-sm-6 col-md-2">
+              <button class="btn btn-outline-secondary"  (click) = "onClickApply()" type="button">Apply</button>
+      </div>
+  
+  </div>
+  <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+          <div id="hsc_map"
+              leaflet
+              [leafletOptions]="hsc_lab"
+              (leafletMapReady)="onMapReady($event)">
+          </div>
+      </div>
+  </div>
+  </div>
+
+
+
+    
+  <div bsModal #categoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-info" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Filter</h4>
+              <button type="button" class="close" (click)="onCrossModalHide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+         
+            <div class="modal-body">
+                    <form>
+                        <div class="row">
+                                <div class="col-md-6" *ngFor="let checkBoxOption of checkBoxOptions">
+                                        <div class="form-check" >
+                                            <label>
+                                                <input type="checkbox" [checked]="checkBoxOption.isActive" (change)="checkBoxOption.isActive = !checkBoxOption.isActive" name="check"> <span class="label-text">{{checkBoxOption.name}}</span>
+                                            </label>
+                                        </div>
+                        </div>
+                        </div>
+                    </form>
+                
+            </div>
+            <div class="modal-footer">
+            
+              <button class="btn btn-outline-secondary" type="button" (click) = "onSubmitModalHide()">
+                <span >Apply</span>
+                <!-- <span *ngIf="loading"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i><span class="sr-only">Loading...</span>{{savingText}}</span>  -->
+              </button>
+             
+            </div>
+          
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->    
+
+  
+  
+  
+  
