@@ -30,7 +30,10 @@ export class HeatmapTjxComponent implements OnInit {
   public bsValueEnd: Date;
   public maxDateEnd: Date; 
   public bsValueStrEnd: string;
-  public bsDateAPIStrEnd: string; 
+  public bsDateAPIStrEnd: string;
+  lat: number = 51.678418;
+  lng: number = 7.809007;
+  iconUrl:string = "../../assets/img/geo_marker.png"
   transformDate(date, format) {
    return this.datePipe.transform(date, format);
   }
@@ -42,7 +45,7 @@ export class HeatmapTjxComponent implements OnInit {
   gHeatmapData= [];
   g_image_layer:any;  
   apPointsPlotted:any;  
-  gApLocationsTJXM1299 = [ [50.67, 61.50], [55.65, 42.55], [27.60, 47.50], [25.65, 66.80]];
+  gApLocationsTJXM1299 = [ [50.67, 61.50], [56.65, 42.55], [27.60, 47.50], [25.65, 66.80]];
   gApLocationsTJXH0006 = [[72.90, 80], [47.50, 62], [47.65, 24]];
   gConfig = { heatmapLowerbound:0,
     heatmapUpperbound: 100,
@@ -69,6 +72,14 @@ export class HeatmapTjxComponent implements OnInit {
      }	           
     
     };
+
+    onChooseLocations(event){
+        this.lat = event.coords.lat;
+        this.lng = event.coords.lng;
+    }
+
+
+
     onMapReady(hscFloormap: L.Map) { 
       this.gFloorMap = hscFloormap;
       this.gFloormapBounds = [[this.gConfig.heatmapLowerbound, this.gConfig.heatmapLowerbound], [this.gConfig.heatmapUpperbound, this.gConfig.heatmapUpperbound]];

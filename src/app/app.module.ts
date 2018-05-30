@@ -17,7 +17,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
 import { DatePipe } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
-import { ModalModule } from "ngx-bootstrap";
+import { ModalModule } from 'ngx-bootstrap';
+import { AgmCoreModule } from '@agm/core';
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
   { path: 'tjx', component: HeatmapTjxComponent, canActivate: [AuthGuard] },
@@ -41,7 +42,10 @@ const appRoutes: Routes = [
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAFgM81Qz-SwfTzUsr4F51AgDj0HdN88CQ'
+    })
   ],
   providers: [
     TjxHeatMapService,

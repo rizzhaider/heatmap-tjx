@@ -62,13 +62,19 @@
   
   </div>
   <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-3 col-md-3 col-lg-3">
+        <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChooseLocations($event)">
+         <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="iconUrl"></agm-marker>
+        </agm-map>
+            </div>
+      <div class="col-sm-9 col-md-9 col-lg-9">
           <div id="hsc_map"
               leaflet
               [leafletOptions]="hsc_lab"
               (leafletMapReady)="onMapReady($event)">
           </div>
       </div>
+     
   </div>
   </div>
 
