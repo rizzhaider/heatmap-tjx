@@ -31,9 +31,10 @@ export class HeatmapTjxComponent implements OnInit {
   public maxDateEnd: Date; 
   public bsValueStrEnd: string;
   public bsDateAPIStrEnd: string;
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-  iconUrl:string = "../../assets/img/geo_marker.png"
+ 
+  lat: number = 40.7128;
+  lng: number = -74.00597;
+  iconUrl:string = "../../assets/img/geo_marker1.png"
   transformDate(date, format) {
    return this.datePipe.transform(date, format);
   }
@@ -72,10 +73,16 @@ export class HeatmapTjxComponent implements OnInit {
      }	           
     
     };
+    gStoreDropdownMaps = [
+      {name: "Marshalls 1299", storeId: 'TJXM1299', lat:40.7128,  lng:-74.00597, markerSrc:'../../assets/img/geo_marker1.png' },
+      {name: "HomeSense 6", storeId: 'TJXH0006', lat:42.2140, lng:-71.2245, markerSrc:'../../assets/img/geo_marker2.png' }     
+    ]
+    public selectedStore = this.gStoreDropdownMaps[0].storeId;
+    
 
-    onChooseLocations(event){
-        this.lat = event.coords.lat;
-        this.lng = event.coords.lng;
+    onMarkerClick(markerClicked){
+        this.selectedStore = markerClicked.storeId;
+        this.getTjxHeatMapData(this.selectedStore, this.bsDateAPIStrStart, this.bsDateAPIStrEnd);
     }
 
 
@@ -101,11 +108,7 @@ export class HeatmapTjxComponent implements OnInit {
     {name: 'Remove Walkthrough', isActive:true}
   ]
 
-  gStoreDropdownMaps = [
-      {name: "Marshalls 1299", storeId: 'TJXM1299' },
-      {name: "HomeSense 6", storeId: 'TJXH0006' }     
-    ]
-    public selectedStore = this.gStoreDropdownMaps[0].storeId;
+  
 
     
   
