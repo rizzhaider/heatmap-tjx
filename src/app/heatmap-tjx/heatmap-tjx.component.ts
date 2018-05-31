@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { circle, geoJSON, icon, latLng, Layer, marker, polygon, tileLayer } from 'leaflet'
 import '../../../node_modules/leaflet.heat/dist/leaflet-heat.js';
 import { TjxHeatMapService } from '../services/tjx_heatmap.service';
@@ -9,14 +9,19 @@ import { TjxMinMaxDateService } from '../services/tjx_min_max_date.service';
 import { TjxMinMaxDate } from '../shared/model/tjxMinMaxDate.model.js';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral, } from '@agm/core';
+
 declare var L;
+declare var google: any;
 @Component({
   selector: 'app-heatmap-tjx',
   templateUrl: './heatmap-tjx.component.html',
   styleUrls: ['./heatmap-tjx.component.css']
 })
-export class HeatmapTjxComponent implements OnInit {
+export class HeatmapTjxComponent implements OnInit, AfterViewInit {
   @ViewChild('categoryModal') _categoryModal: any;
+  @ViewChild('AgmMap') agmMap: AgmMap;
+  @ViewChild('infoWindow') _infoWindow:any;
   loading : boolean = false;
   public isOnChange:boolean = false;  
   public options:Options = new Options();
@@ -31,16 +36,16 @@ export class HeatmapTjxComponent implements OnInit {
   public maxDateEnd: Date; 
   public bsValueStrEnd: string;
   public bsDateAPIStrEnd: string;
- 
-  lat: number = 40.7128;
-  lng: number = -74.00597;
-  iconUrl:string = "../../assets/img/geo_marker1.png"
+  streetViewControl:boolean = false;
+  disableDefaultUI: boolean = false;
+  zoomControl:boolean = false;
   transformDate(date, format) {
    return this.datePipe.transform(date, format);
   }
+  
   public tjxHeatmapDataRes:TjxHeatMapData[];
   public tjxMinMaxDateRes:TjxMinMaxDate = new TjxMinMaxDate();
-  //gStoreDropdownMap = new Map();
+  
   gStoreLocationMap = new Map();  
   gFloormapBounds = [];
   gHeatmapData= [];
@@ -73,11 +78,39 @@ export class HeatmapTjxComponent implements OnInit {
      }	           
     
     };
+
+    constructor(private tjxHeatMapService: TjxHeatMapService, 
+      private datePipe: DatePipe,
+      private tjxMinMaxDateService:TjxMinMaxDateService,            
+      private toastr: ToastrService){
+      
+}
+
+    ngAfterViewInit() {
+      this.agmMap.mapReady.subscribe(map => {
+        const bounds: LatLngBounds = new google.maps.LatLngBounds();
+        for (const mm of this.gStoreDropdownMaps) {
+          bounds.extend(new google.maps.LatLng(mm.lat, mm.lng));
+        }
+        map.fitBounds(bounds);
+      });
+    }
+  
+    ngOnInit() {
+     
+      var self = this;
+      this.getFromDateToEndDate(this.selectedStore, "", function(){
+        self.getTjxHeatMapData(self.selectedStore, self.bsDateAPIStrStart,  self.bsDateAPIStrEnd);
+      });
+    
+    }
     gStoreDropdownMaps = [
-      {name: "Marshalls 1299", storeId: 'TJXM1299', lat:40.7128,  lng:-74.00597, markerSrc:'../../assets/img/geo_marker1.png' },
-      {name: "HomeSense 6", storeId: 'TJXH0006', lat:42.2140, lng:-71.2245, markerSrc:'../../assets/img/geo_marker2.png' }     
+      {name: "Marshalls 1299", storeId: 'TJXM1299', lat:40.7128,  lng:-74.00597, storeDetail:'TJXM1299, Marshalls 1299, Marshalls, New York, New York' },
+      {name: "HomeSense 6", storeId: 'TJXH0006', lat:42.2140, lng:-71.2245, storeDetail:'TJXH0006, HomeSense 6, HomeSense, Massachusetts, Westwood' }   
     ]
     public selectedStore = this.gStoreDropdownMaps[0].storeId;
+    lat: number = this.gStoreDropdownMaps[0].lat;
+    lng: number = this.gStoreDropdownMaps[0].lng;
     
 
     onMarkerClick(markerClicked){
@@ -85,7 +118,13 @@ export class HeatmapTjxComponent implements OnInit {
         this.getTjxHeatMapData(this.selectedStore, this.bsDateAPIStrStart, this.bsDateAPIStrEnd);
     }
 
-
+    onMouseOver(infoWindow, Agm) {
+      if (Agm.lastOpen != null) {
+        Agm.lastOpen.close();
+       }
+       Agm.lastOpen = infoWindow;
+       infoWindow.open();
+    }
 
     onMapReady(hscFloormap: L.Map) { 
       this.gFloorMap = hscFloormap;
@@ -107,25 +146,8 @@ export class HeatmapTjxComponent implements OnInit {
     {name:'Remove Random MAC',  isActive:true},
     {name: 'Remove Walkthrough', isActive:true}
   ]
-
   
-
-    
   
-  constructor(private tjxHeatMapService: TjxHeatMapService, 
-              private datePipe: DatePipe,
-              private tjxMinMaxDateService:TjxMinMaxDateService,            
-              private toastr: ToastrService){
-              
-  }
-
-  ngOnInit() {
-    var self = this;
-    this.getFromDateToEndDate(this.selectedStore, "", function(){
-      self.getTjxHeatMapData(self.selectedStore, self.bsDateAPIStrStart,  self.bsDateAPIStrEnd);
-    });
-  
-  }
   clearCheckBoxOptions(){
     this.checkBoxOptions.forEach((item) => {
       item.isActive = false;
