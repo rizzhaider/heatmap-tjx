@@ -19,9 +19,10 @@ declare var google: any;
   styleUrls: ['./heatmap-tjx.component.css']
 })
 export class HeatmapTjxComponent implements OnInit, AfterViewInit {
-  @ViewChild('categoryModal') _categoryModal: any;
+  @ViewChild('filterModal') _filterModal: any;
   @ViewChild('AgmMap') agmMap: AgmMap;
   @ViewChild('infoWindow') _infoWindow:any;
+  @ViewChild('geoMapModal') _geoMapModal:any;
   loading : boolean = false;
   public isOnChange:boolean = false;  
   public options:Options = new Options();
@@ -39,6 +40,7 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
   streetViewControl:boolean = false;
   disableDefaultUI: boolean = false;
   zoomControl:boolean = false;
+  infoWindowMaxWidth:number = 120;
   transformDate(date, format) {
    return this.datePipe.transform(date, format);
   }
@@ -97,7 +99,6 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     }
   
     ngOnInit() {
-     
       var self = this;
       this.getFromDateToEndDate(this.selectedStore, "", function(){
         self.getTjxHeatMapData(self.selectedStore, self.bsDateAPIStrStart,  self.bsDateAPIStrEnd);
@@ -105,8 +106,9 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     
     }
     gStoreDropdownMaps = [
-      {name: "Marshalls 1299", storeId: 'TJXM1299', lat:40.7128,  lng:-74.00597, storeDetail:'TJXM1299, Marshalls 1299, Marshalls, New York, New York' },
-      {name: "HomeSense 6", storeId: 'TJXH0006', lat:42.2140, lng:-71.2245, storeDetail:'TJXH0006, HomeSense 6, HomeSense, Massachusetts, Westwood' }   
+      {name: "Marshalls 1299", storeId: 'TJXM1299', lat:40.7128,  lng:-74.00597, storeDetail:'TJXM1299, Marshalls 1299, Marshalls, New York, New York'},
+      {name: "HomeSense 6", storeId: 'TJXH0006', lat:42.2140, lng:-71.2245, storeDetail:'TJXH0006, HomeSense 6, HomeSense, Massachusetts, Westwood' }
+        
     ]
     public selectedStore = this.gStoreDropdownMaps[0].storeId;
     lat: number = this.gStoreDropdownMaps[0].lat;
@@ -159,15 +161,21 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
   showInfo() {
     this.toastr.info('Click on apply button to change store Image.','',{timeOut: 2000});
   }
-  onAddCategory(){
+  onfilterClick(){
     //this.clearCheckBoxOptions();
-    this._categoryModal.show();
+    this._filterModal.show();
 
   }
- 
-  onCrossModalHide(){   
-    this._categoryModal.hide(); 
+  onGeoMapClick(){
+    this._geoMapModal.show();
+  }
+  
+  onCrossFilterModal(){   
+    this._filterModal.hide(); 
     this.checkBoxOptions = JSON.parse(JSON.stringify(this.previousFilterOptions));    
+  }
+  onCrossGeoMapModal(){
+    this._geoMapModal.hide();
   }
   onSubmitModalHide(){    
     let categoryData = {
@@ -179,7 +187,7 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     console.log(this.checkBoxOptions[3].isActive);
     console.log(categoryData);
     console.log(this.selectedStore, this.bsDateAPIStrStart,  this.bsDateAPIStrEnd);
-    this._categoryModal.hide();
+    this._filterModal.hide();
     this.previousFilterOptions = JSON.parse(JSON.stringify(this.checkBoxOptions));
   }
  

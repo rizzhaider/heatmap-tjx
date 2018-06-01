@@ -2,9 +2,9 @@
     <img id="img-spinner" src="../../assets/img/spinner.gif" alt="Loading" />
 </div>
 
-<div class="container"  >
+<div class="container">
   <div class="row">
-      <div class="col-sm-6   col-md-3">
+      <div class="col-12 col-sm-6 col-md-3">
               <div class="form-group ">
                  <div class="input-group">
                       
@@ -15,7 +15,7 @@
               </div> 
       </div>
      
-      <div class="col-sm-6 col-md-3">
+      <div class="col-6 col-sm-6 col-md-3">
           <div class="form-group ">
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -33,7 +33,7 @@
             </div>
       </div>
       
-      <div class="col-sm-6 col-md-3">
+      <div class="col-6 col-sm-6 col-md-3">
           <div class="form-group ">               
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -50,30 +50,20 @@
                 </div>            
             </div>
       </div>
-      <div class="col-sm-6 col-md-1">
-            <button  data-toggle="modal" (click) = "onAddCategory()"  class="btn btn-outline-secondary" type="button">
+      <div class="col-3 col-sm-6 col-md-1">
+            <button  data-toggle="modal" (click) = "onfilterClick()"  class="btn btn-outline-secondary" type="button">
                     <span ><i class="fa fa-filter" aria-hidden="true"></i> Filter</span>                   
                   </button>
             
       </div>
-      <div class="col-sm-6 col-md-2">
+      <div class="col-3 col-sm-6 col-md-2">
               <button class="btn btn-outline-secondary"  (click) = "onClickApply()" type="button">Apply</button>
       </div>
   
   </div>
   <div class="row">
-        <div class="col-sm-3 col-md-3 col-lg-3">
-        <agm-map #AgmMap [latitude]="lat" [longitude]="lng" [streetViewControl]="streetViewControl" [disableDefaultUI]="disableDefaultUI" [zoomControl]="zoomControl"  >
-         <agm-marker (markerClick)="onMarkerClick(gStoreDropdownMap)" (mouseOver)="onMouseOver(infoWindow,AgmMap)"  *ngFor="let gStoreDropdownMap of gStoreDropdownMaps" [latitude]="gStoreDropdownMap.lat" [longitude]="gStoreDropdownMap.lng" >
-
-                <agm-info-window #infoWindow > 
-                        <strong >{{gStoreDropdownMap.storeDetail}}</strong>
-                    </agm-info-window>
-         </agm-marker>
-          
-        </agm-map>
-            </div>
-      <div class="col-sm-9 col-md-9 col-lg-9">
+        
+      <div class="col-sm-12 col-md-12 col-lg-12">
           <div id="hsc_map"
               leaflet
               [leafletOptions]="hsc_lab"
@@ -84,15 +74,56 @@
   </div>
   </div>
 
-
-
-    
-  <div bsModal #categoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id="mySidenav" class="sidenav">
+             
+              <button  data-toggle="modal" (click) = "onGeoMapClick()"  class="btn btn-outline-secondary geoMap" type="button">
+                    <span ><i class="fa fa-map-marker" aria-hidden="true"></i> Geo Map</span>                   
+            </button>
+        
+      </div>
+      
+      <div bsModal #geoMapModal="bs-modal" class="modal bottom fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" [config]="{backdrop: false,   show: true}"    aria-hidden="true">
+            <div class="modal-dialog modal-info" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Geo Map</h4>
+                  <button type="button" class="close" (click)="onCrossGeoMapModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+             
+                <div class="modal-body">
+                       
+                            <div class="row">
+                                    <div class="col-md-12">
+                                            <agm-map #AgmMap [latitude]="lat" [longitude]="lng" [streetViewControl]="streetViewControl" [disableDefaultUI]="disableDefaultUI" [zoomControl]="zoomControl"  >
+                                             <agm-marker (markerClick)="onMarkerClick(gStoreDropdownMap)" (mouseOver)="onMouseOver(infoWindow,AgmMap)"  *ngFor="let gStoreDropdownMap of gStoreDropdownMaps" [latitude]="gStoreDropdownMap.lat" [longitude]="gStoreDropdownMap.lng" >
+                                    
+                                                    <agm-info-window #infoWindow [maxWidth]="infoWindowMaxWidth"> 
+                                                            <strong >{{gStoreDropdownMap.storeDetail}}</strong>
+                                                        </agm-info-window>
+                                             </agm-marker>
+                                              
+                                            </agm-map>
+                                                </div>
+                            </div>
+                      
+                    
+                </div>
+             
+              
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->    
+  
+  
+  
+  <div bsModal #filterModal="bs-modal" class="modal right fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" [config]="{backdrop: false}"    aria-hidden="true">
         <div class="modal-dialog modal-info" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Filter</h4>
-              <button type="button" class="close" (click)="onCrossModalHide()" aria-label="Close">
+              <button type="button" class="close" (click)="onCrossFilterModal()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -124,7 +155,7 @@
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->    
 
-  
-  
-  
-  
+
+      
+    
+    

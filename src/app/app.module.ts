@@ -17,8 +17,10 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
 import { DatePipe } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule  } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { AgmCoreModule } from '@agm/core';
+
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
   { path: 'tjx', component: HeatmapTjxComponent, canActivate: [AuthGuard] },
@@ -39,6 +41,7 @@ const appRoutes: Routes = [
     LeafletModule.forRoot(),
     BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
+    PopoverModule.forRoot(),
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
