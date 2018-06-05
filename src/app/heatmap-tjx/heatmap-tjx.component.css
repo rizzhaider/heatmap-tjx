@@ -109,6 +109,9 @@ agm-map{
 	}
 
 /* ----- MODAL STYLE ----- */
+.geo-modal{
+  position: relative !important;
+}
 	.modal-content {
 		border-radius: 0;
 		border: none;

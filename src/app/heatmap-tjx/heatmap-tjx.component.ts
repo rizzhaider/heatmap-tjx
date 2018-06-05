@@ -44,7 +44,6 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
   transformDate(date, format) {
    return this.datePipe.transform(date, format);
   }
-  
   public tjxHeatmapDataRes:TjxHeatMapData[];
   public tjxMinMaxDateRes:TjxMinMaxDate = new TjxMinMaxDate();
   
@@ -116,8 +115,17 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     
 
     onMarkerClick(markerClicked){
-        this.selectedStore = markerClicked.storeId;
-        this.getTjxHeatMapData(this.selectedStore, this.bsDateAPIStrStart, this.bsDateAPIStrEnd);
+      this.isOnChange = false;
+        this.selectedStore = markerClicked.storeId;      
+        var selectedDate = {
+          maxDate: this.bsDateAPIStrEnd, 
+          minDate: this.bsDateAPIStrStart
+        }
+        var self = this;
+        this.getFromDateToEndDate(this.selectedStore, selectedDate, function(){
+          self.getTjxHeatMapData(self.selectedStore, self.bsDateAPIStrStart,  self.bsDateAPIStrEnd);
+        });
+        
     }
 
     onMouseOver(infoWindow, Agm) {
@@ -150,11 +158,11 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
   ]
   
   
-  clearCheckBoxOptions(){
-    this.checkBoxOptions.forEach((item) => {
-      item.isActive = false;
-    })
-  }//clearCheckBoxOptions
+  // clearCheckBoxOptions(){
+  //   this.checkBoxOptions.forEach((item) => {
+  //     item.isActive = false;
+  //   })
+  // }//clearCheckBoxOptions
   showError() {
     this.toastr.error('something went wrong!', 'Oops!', {timeOut: 2000})
   }
@@ -162,7 +170,7 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     this.toastr.info('Click on apply button to change store Image.','',{timeOut: 2000});
   }
   onfilterClick(){
-    //this.clearCheckBoxOptions();
+   
     this._filterModal.show();
 
   }
@@ -181,12 +189,6 @@ export class HeatmapTjxComponent implements OnInit, AfterViewInit {
     let categoryData = {
       object:this.checkBoxOptions
     }
-    console.log(this.checkBoxOptions[0].isActive);
-    console.log(this.checkBoxOptions[1].isActive);
-    console.log(this.checkBoxOptions[2].isActive);
-    console.log(this.checkBoxOptions[3].isActive);
-    console.log(categoryData);
-    console.log(this.selectedStore, this.bsDateAPIStrStart,  this.bsDateAPIStrEnd);
     this._filterModal.hide();
     this.previousFilterOptions = JSON.parse(JSON.stringify(this.checkBoxOptions));
   }
@@ -382,9 +384,6 @@ configureDate(data, selectedDate){
     this.showInfo();
   }
 }
-
-
-
 
 parseAndFillApData(apJsonData, storeId , hscFloormap) {   
   this.removeAllMapLayers(hscFloormap);
